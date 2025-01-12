@@ -1,77 +1,53 @@
-## Welcome to your new SaaS App! 🎉
-<a href="https://www.producthunt.com/posts/open-saas?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-open&#0045;saas" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=436467&theme=light" alt="Open&#0032;SaaS - Open&#0045;source&#0032;&#0038;&#0032;100&#0037;&#0032;free&#0032;React&#0032;&#0038;&#0032;Node&#0046;js&#0032;SaaS&#0032;starter&#0033; | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+# OpenSaas.sh
 
-https://github.com/wasp-lang/open-saas/assets/70215737/5ff289b1-12b9-4b46-aa90-a6a3122de93e
+This is the https://opensaas.sh page and demo app, built with the Open Saas template!
 
-You've decided to build a SaaS app with the Open SaaS template. Great choice! 
+It consists of a Wasp app for showcasing the Open Saas template (+ landing page), while the Astro blog is blog and docs for the Open Saas template, found at https://docs.opensaas.sh.
 
-This template is:
+Inception :)!
 
-1. fully open-source
-2. completely free to use and distribute
-3. comes with a ton of features out of the box!
-4. focused on free, open-source services, where possible
+## Development
 
-🧑‍💻 Check it out in action here: [OpenSaaS.sh](https://opensaas.sh)  
-📚 Check out the Docs here: [Open SaaS Docs](https://docs.opensaas.sh)
+### Demo app (app_diff/)
 
-## What's inside?
+Since the demo app is just the open saas template with some small tweaks, and we want to be able to easily keep it up to date as the template changes, we don't version (in git) the actual demo app code, instead we version the diffs between it and the template: `app_diff/`.
 
-The template itself is built on top of some very powerful tools and frameworks, including:
+So because we don't version the actual demo app (`app/`) but its diffs instead (`app_diff`), the typical workflow is as follows:
 
-- 🐝 [Wasp](https://wasp-lang.dev) - a full-stack React, NodeJS, Prisma framework with superpowers
-- 🚀 [Astro](https://starlight.astro.build/) - Astro's lightweight "Starlight" template for documentation and blog
-- 💸 [Stripe](https://stripe.com) or [Lemon Squeezy](https://lemonsqueezy.com/) - for products and payments
-- 📈 [Plausible](https://plausible.io) or [Google](https://analytics.google.com/) Analytics
-- 🤖 [OpenAI](https://openai.com) - OpenAI API w/ function calling example
-- 📦 [AWS S3](https://aws.amazon.com/s3/) - for file uploads
-- 📧 [SendGrid](https://sendgrid.com), [MailGun](https://mailgun.com), or SMTP - for email sending
-- 💅 [TailwindCSS](https://tailwindcss.com) - for styling
-- 🧑‍💼 [TailAdmin](https://tailadmin.com/) - admin dashboard & components for TailwindCSS
-- 🧪 [Playwright](https://playwright.dev) - end-to-end tests with Playwright
+1. Run `./tools/patch.sh` to generate `app/` from `../template/` and `app_diff/`.
+2. If there are any conflicts (normally due to updates to the template), modify `app/` till you resolve them. Do any additional changes also if you wish.
+3. Generate new `app_diff/`, based on the current updated `app/`, by running `./tools/diff.sh`.
 
-Because we're using Wasp as the full-stack framework, we can leverage a lot of its features to build our SaaS in record time, including:
+**Running on MacOS**
 
-- 🔐 [Full-stack Authentication](https://wasp-lang.dev/docs/auth/overview) - Email verified + social Auth in a few lines of code.
-- ⛑ [End-to-end Type Safety](https://wasp-lang.dev/docs/data-model/operations/overview) - Type your backend functions and get inferred types on the front-end automatically, without the need to install or configure any third-party libraries. Oh, and type-safe Links, too!
-- 🤖 [Jobs](https://wasp-lang.dev/docs/advanced/jobs) - Run cron jobs in the background or set up queues simply by defining a function in the config file.
-- 🚀 [One-command Deploy](https://wasp-lang.dev/docs/advanced/deployment/overview) - Easily deploy via the CLI to [Fly.io](https://fly.io), or to other providers like [Railway](https://railway.app) and [Netlify](https://netlify.com).
+If you're running the `patch.sh` or `diff.sh` scripts on Mac, you need to install:
 
-You also get access to Wasp's diverse, helpful community if you get stuck or need help.
-- 🤝 [Wasp Discord](https://discord.gg/aCamt5wCpS)
+- `grealpath` (packaged within `coreutils`),
+- `gpatch`,
+- and `diffutils`.
 
-## Getting Started
+You should also create aliases for `realpath` and `patch`:
 
-### Simple Instructions
+```sh
+brew install coreutils # contains grealpath
+brew install gpatch
+brew install diffutils
 
-First, to install the latest version of [Wasp](https://wasp.sh/) on macOS, Linux, or Windows with WSL, run the following command:
-```bash
-curl -sSL https://get.wasp-lang.dev/installer.sh | sh
+echo 'alias realpath="grealpath"' >> ~/.zshrc
+echo 'alias patch="gpatch"' >> ~/.zshrc
+source ~/.zshrc
 ```
 
-Then, create a new SaaS app with the following command:
+Make sure not to commit `app/` to git. It is currently (until we resolve this) not added to .gitignore because that messes up diffing for us.
 
-```bash
-wasp new -t saas
-```
+### Blog (blog/)
 
-This will create a **clean copy of the Open SaaS template** into a new directory, and you can start building your SaaS app right away!
+Blog (and docs in it) is currently tracked in whole, as it has quite some content, so updating it to the latest version of Open Saas is done manually, but it might be interesting to also move it to the `diff` approach, as we use for the demo app, if it turns out to be a good match.
 
-### Detailed Instructions
+For more info on authoring content for the docs and blog, including information on custom components, see the [blog/README.md](blog/README.md).
 
-For everything you need to know about getting started and using this template, check out the [Open SaaS Docs](https://docs.opensaas.sh).
+## Deployment
 
-We've documented everything in great detail, including installation instructions, pulling updates to the template, guides for integrating services, SEO, deployment, and more. 🚀
+App: check its README.md (after you generate it with `.tools/patch.sh`) .
 
-## Getting Help & Providing Feedback
-
-There are two ways to get help or provide feedback (and we try to always respond quickly!):
-1. [Open an issue](https://github.com/wasp-lang/open-saas/issues)
-2. [Wasp Discord](https://discord.gg/aCamt5wCpS) -- please direct questions to the #🙋questions forum channel
-
-## Contributing
-
-Note that we've tried to get as many of the core features of a SaaS app into this template as possible, but there still might be some missing features or functionality.
-
-We could always use some help tying up loose ends: contributions are welcome! Check out [CONTRIBUTING.md](/CONTRIBUTING.md) for more details.
-
+Blog (docs): hosted on Netlify.

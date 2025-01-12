@@ -3,40 +3,62 @@ import { requireNodeEnvVar } from '../server/utils';
 export type SubscriptionStatus = 'past_due' | 'cancel_at_period_end' | 'active' | 'deleted';
 
 export enum PaymentPlanId {
-  Hobby = 'hobby',
+  Free = 'free',
+  Premium = 'premium',
   Pro = 'pro',
-  Credits10 = 'credits10',
+  Enterprise = 'enterprise'
 }
 
 export interface PaymentPlan {
-  // Returns the id under which this payment plan is identified on your payment processor. 
-  // E.g. this might be price id on Stripe, or variant id on LemonSqueezy.
+  // Returns the id under which this payment plan is identified on your payment processor.
   getPaymentProcessorPlanId: () => string;
   effect: PaymentPlanEffect;
+  // Group and player limits for golf management
+  maxGroups: number;
+  maxPlayersPerGroup: number;
+  // Monthly price in USD
+  price: number;
 }
 
 export type PaymentPlanEffect = { kind: 'subscription' } | { kind: 'credits'; amount: number };
 
 export const paymentPlans: Record<PaymentPlanId, PaymentPlan> = {
-  [PaymentPlanId.Hobby]: {
-    getPaymentProcessorPlanId: () => requireNodeEnvVar('PAYMENTS_HOBBY_SUBSCRIPTION_PLAN_ID'),
+  [PaymentPlanId.Free]: {
+    getPaymentProcessorPlanId: () => requireNodeEnvVar('PAYMENTS_FREE_PLAN_ID'),
     effect: { kind: 'subscription' },
+    maxGroups: 1,
+    maxPlayersPerGroup: 8,
+    price: 0
+  },
+  [PaymentPlanId.Premium]: {
+    getPaymentProcessorPlanId: () => requireNodeEnvVar('PAYMENTS_PREMIUM_PLAN_ID'),
+    effect: { kind: 'subscription' },
+    maxGroups: 1,
+    maxPlayersPerGroup: 24,
+    price: 15
   },
   [PaymentPlanId.Pro]: {
-    getPaymentProcessorPlanId: () => requireNodeEnvVar('PAYMENTS_PRO_SUBSCRIPTION_PLAN_ID'),
+    getPaymentProcessorPlanId: () => requireNodeEnvVar('PAYMENTS_PRO_PLAN_ID'),
     effect: { kind: 'subscription' },
+    maxGroups: 5,
+    maxPlayersPerGroup: Number.MAX_SAFE_INTEGER,
+    price: 30
   },
-  [PaymentPlanId.Credits10]: {
-    getPaymentProcessorPlanId: () => requireNodeEnvVar('PAYMENTS_CREDITS_10_PLAN_ID'),
-    effect: { kind: 'credits', amount: 10 },
-  },
+  [PaymentPlanId.Enterprise]: {
+    getPaymentProcessorPlanId: () => requireNodeEnvVar('PAYMENTS_ENTERPRISE_PLAN_ID'),
+    effect: { kind: 'subscription' },
+    maxGroups: Number.MAX_SAFE_INTEGER,
+    maxPlayersPerGroup: Number.MAX_SAFE_INTEGER,
+    price: 50
+  }
 };
 
 export function prettyPaymentPlanName(planId: PaymentPlanId): string {
   const planToName: Record<PaymentPlanId, string> = {
-    [PaymentPlanId.Hobby]: 'Hobby',
+    [PaymentPlanId.Free]: 'Free',
+    [PaymentPlanId.Premium]: 'Premium',
     [PaymentPlanId.Pro]: 'Pro',
-    [PaymentPlanId.Credits10]: '10 Credits',
+    [PaymentPlanId.Enterprise]: 'Enterprise'
   };
   return planToName[planId];
 }

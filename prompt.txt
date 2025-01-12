@@ -1,0 +1,60 @@
+MGMT.golf Web App
+
+Your task is to build my web app using the Wasp OpenSaaS framework (already in the project) with existing integrations (Stripe payments, Prisma DB, email notifications). Refer to Wasp’s OpenSaaS docs (in opensaas.txt) before development. I already have the Wasp Opensaas.sh starter app running at localhost:3000
+
+- Additional Wasp docs here: https://wasp-lang.dev/docs
+
+1. Authentication & Organization
+Wasp OpenSaaS
+Registration/Login
+Profile management
+Subscription tiers management
+Group Management
+Create/edit golf groups
+Invite/manage members via email
+Basic group permissions (admin/member)
+Group limits by tier:
+Free: 1 group, 8 players
+Premium: 1 group, 24 players ($15/month)
+Pro: 5 groups, unlimited players ($30/month)
+Enterprise: Unlimited groups/players ($50/month)
+2. Course Management
+Simple Course Entry
+Add courses via form input (name, address)
+Store in database for reuse
+Course Features
+Add/remove courses from groups
+View course details
+Course history per group
+3. Tee Time Management
+Scheduling
+Create tee times (date, time, course selection)
+Set player limit (2-4)
+Optional notes field
+Player Management
+Join/leave functionality
+Track confirmed players
+Basic waitlist system
+Email notifications
+Views
+Upcoming tee times
+Past tee times
+4. User Interface
+Main Dashboard (ShadCN mail app layout)
+Left sidebar navigation:
+Dashboard
+Groups
+Tee Times
+Courses
+Profile/Settings/Billing
+Main content area:
+Upcoming tee times
+Quick stats
+Recent activity
+5. Admin Dashboard
+Simple admin panel to:
+View/manage users
+Monitor subscriptions
+Basic usage analytics
+Note: Built for group cost-sharing - split subscription cost among group members for affordability.
+

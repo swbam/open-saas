@@ -3,42 +3,36 @@ app OpenSaaS {
     version: "^0.15.0"
   },
 
-  title: "My Open SaaS App",
+  title: "MGMT.golf",
 
   head: [
     "<meta charset='utf-8' />",
-    "<meta name='description' content='Your apps main description and features.' />",
-    "<meta name='author' content='Your (App) Name' />",
-    "<meta name='keywords' content='saas, solution, product, app, service' />",
+    "<meta name='description' content='Golf group management made easy - Schedule tee times, manage groups, and track courses.' />",
+    "<meta name='author' content='MGMT.golf' />",
+    "<meta name='keywords' content='golf, tee times, group management, courses' />",
     
+    "<meta property='og:site_name' content='MGMT.golf' />",
     "<meta property='og:type' content='website' />",
-    "<meta property='og:title' content='Your Open SaaS App' />",
-    "<meta property='og:site_name' content='Your Open SaaS App' />",
-    "<meta property='og:url' content='https://your-saas-app.com' />",
-    "<meta property='og:description' content='Your apps main description and features.' />",
-    "<meta property='og:image' content='https://your-saas-app.com/public-banner.webp' />",
-    "<meta name='twitter:image' content='https://your-saas-app.com/public-banner.webp' />",
+    "<meta property='og:title' content='MGMT.golf' />",
+    "<meta property='og:description' content='Golf group management made easy - Schedule tee times, manage groups, and track courses.' />",
+    "<meta property='og:image' content='https://mgmt.golf/public-banner.webp' />",
+
+    "<meta name='twitter:title' content='MGMT.golf' />",
+    "<meta name='twitter:text:title' content='MGMT.golf' />",
+    "<meta name='twitter:image' content='https://mgmt.golf/public-banner.webp' />",
+    "<meta name='twitter:image:alt' content='MGMT.golf' />",
     "<meta name='twitter:image:width' content='800' />",
     "<meta name='twitter:image:height' content='400' />",
-    "<meta name='twitter:card' content='summary_large_image' />",
-    // TODO: You can put your Plausible analytics scripts below (https://docs.opensaas.sh/guides/analytics/):
-    // NOTE: Plausible does not use Cookies, so you can simply add the scripts here.
-    // Google, on the other hand, does, so you must instead add the script dynamically
-    // via the Cookie Consent component after the user clicks the "Accept" cookies button.
-    "<script defer data-domain='<your-site-id>' src='https://plausible.io/js/script.js'></script>",  // for production
-    "<script defer data-domain='<your-site-id>' src='https://plausible.io/js/script.local.js'></script>",  // for development
+    "<meta name='twitter:card' content='summary_large_image' />"
   ],
 
-  // 🔐 Auth out of the box! https://wasp-lang.dev/docs/auth/overview
   auth: {
     userEntity: User,
     methods: {
-      // NOTE: If you decide to not use email auth, make sure to also delete the related routes and pages below.
-      //   (RequestPasswordReset(Route|Page), PasswordReset(Route|Page), EmailVerification(Route|Page))
       email: {
         fromField: {
-          name: "Open SaaS App",
-          email: "me@example.com"
+          name: "MGMT.golf",
+          email: "noreply@mgmt.golf"
         },
         emailVerification: {
           clientRoute: EmailVerificationRoute,
@@ -49,51 +43,30 @@ app OpenSaaS {
           getEmailContentFn: import { getPasswordResetEmailContent } from "@src/auth/email-and-pass/emails",
         },
         userSignupFields: import { getEmailUserFields } from "@src/auth/userSignupFields",
-      },
-      // Uncomment to enable Google Auth (check https://wasp-lang.dev/docs/auth/social-auth/google for setup instructions):
-      // google: { // Guide for setting up Auth via Google
-      //   userSignupFields: import { getGoogleUserFields } from "@src/auth/userSignupFields",
-      //   configFn: import { getGoogleAuthConfig } from "@src/auth/userSignupFields",
-      // },
-      // Uncomment to enable GitHub Auth (check https://wasp-lang.dev/docs/auth/social-auth/github for setup instructions):
-      // gitHub: {
-      //   userSignupFields: import { getGitHubUserFields } from "@src/auth/userSignupFields",
-      //   configFn: import { getGitHubAuthConfig } from "@src/auth/userSignupFields",
-      // },
-      // Uncomment to enable Discord Auth (check https://wasp-lang.dev/docs/auth/social-auth/discord for setup instructions):
-      // discord: {
-      //   userSignupFields: import { getDiscordUserFields } from "@src/auth/userSignupFields",
-      //   configFn: import { getDiscordAuthConfig } from "@src/auth/userSignupFields"
-      // }
+      }
     },
     onAfterSignup: import { onAfterSignup } from "@src/auth/hooks",
     onAuthFailedRedirectTo: "/login",
-    onAuthSucceededRedirectTo: "/demo-app",
+    onAuthSucceededRedirectTo: "/dashboard",
   },
 
   db: {
-    // Run `wasp db seed` to seed the database with the seed functions below:
     seeds: [
-      // Populates the database with a bunch of fake users to work with during development.
-      import { seedMockUsers } from "@src/server/scripts/dbSeeds",
+      import { seedMockUsers } from "@src/server/scripts/dbSeeds"
     ]
   },
 
   client: {
-    rootComponent: import App from "@src/client/App",
+    rootComponent: import App from "@src/App",
   },
 
   emailSender: {
-    // NOTE: "Dummy" provider is just for local development purposes.
-    //   Make sure to check the server logs for the email confirmation url (it will not be sent to an address)!
-    //   Once you are ready for production, switch to e.g. "SendGrid" or "Mailgun" providers. Check out https://docs.opensaas.sh/guides/email-sending/ .
     provider: Dummy,
     defaultFrom: {
-      name: "Open SaaS App",
-      // When using a real provider, e.g. SendGrid, you must use the same email address that you configured your account to send out emails with!
-      email: "me@example.com"
-    },
-  },
+      name: "MGMT.golf",
+      email: "noreply@mgmt.golf"
+    }
+  }
 }
 
 route LandingPageRoute { path: "/", to: LandingPage }
@@ -101,7 +74,12 @@ page LandingPage {
   component: import LandingPage from "@src/landing-page/LandingPage"
 }
 
-//#region Auth Pages
+route DashboardRoute { path: "/dashboard", to: DashboardPage }
+page DashboardPage {
+  authRequired: true,
+  component: import DashboardPage from "@src/client/DashboardPage"
+}
+
 route LoginRoute { path: "/login", to: LoginPage }
 page LoginPage {
   component: import Login from "@src/auth/LoginPage"
@@ -114,21 +92,19 @@ page SignupPage {
 
 route RequestPasswordResetRoute { path: "/request-password-reset", to: RequestPasswordResetPage }
 page RequestPasswordResetPage {
-  component: import { RequestPasswordResetPage } from "@src/auth/email-and-pass/RequestPasswordResetPage",
+  component: import { RequestPasswordResetPage } from "@src/auth/email-and-pass/RequestPasswordResetPage"
 }
 
 route PasswordResetRoute { path: "/password-reset", to: PasswordResetPage }
 page PasswordResetPage {
-  component: import { PasswordResetPage } from "@src/auth/email-and-pass/PasswordResetPage",
+  component: import { PasswordResetPage } from "@src/auth/email-and-pass/PasswordResetPage"
 }
 
 route EmailVerificationRoute { path: "/email-verification", to: EmailVerificationPage }
 page EmailVerificationPage {
-  component: import { EmailVerificationPage } from "@src/auth/email-and-pass/EmailVerificationPage",
+  component: import { EmailVerificationPage } from "@src/auth/email-and-pass/EmailVerificationPage"
 }
-//#endregion
 
-//#region User
 route AccountRoute { path: "/account", to: AccountPage }
 page AccountPage {
   authRequired: true,
@@ -149,60 +125,90 @@ action updateUserById {
   fn: import { updateUserById } from "@src/user/operations",
   entities: [User]
 }
-//#endregion
 
-//#region Demo AI App
-route DemoAppRoute { path: "/demo-app", to: DemoAppPage }
-page DemoAppPage {
+route GroupsRoute { path: "/groups", to: GroupsPage }
+page GroupsPage {
   authRequired: true,
-  component: import DemoAppPage from "@src/demo-ai-app/DemoAppPage"
+  component: import GroupsPage from "@src/groups/GroupsPage"
 }
 
-action generateGptResponse {
-  fn: import { generateGptResponse } from "@src/demo-ai-app/operations",
-  entities: [User, Task, GptResponse]
+route GroupRoute { path: "/groups/:groupId", to: GroupPage }
+page GroupPage {
+  authRequired: true,
+  component: import GroupPage from "@src/groups/GroupPage"
 }
 
-action createTask {
-  fn: import { createTask } from "@src/demo-ai-app/operations",
-  entities: [Task]
+query getGroups {
+  fn: import { getGroups } from "@src/groups/queries",
+  entities: [Group, GroupMember, Course, TeeTime]
 }
 
-action deleteTask {
-  fn: import { deleteTask } from "@src/demo-ai-app/operations",
-  entities: [Task]
+query getGroupById {
+  fn: import { getGroupById } from "@src/groups/queries",
+  entities: [Group, GroupMember, Course, TeeTime]
 }
 
-action updateTask {
-  fn: import { updateTask } from "@src/demo-ai-app/operations",
-  entities: [Task]
+action createGroup {
+  fn: import { createGroup } from "@src/groups/actions",
+  entities: [Group, GroupMember]
 }
 
-query getGptResponses {
-  fn: import { getGptResponses } from "@src/demo-ai-app/operations",
-  entities: [User, GptResponse]
+action updateGroup {
+  fn: import { updateGroup } from "@src/groups/actions",
+  entities: [Group, GroupMember]
 }
 
-query getAllTasksByUser {
-  fn: import { getAllTasksByUser } from "@src/demo-ai-app/operations",
-  entities: [Task]
+action deleteGroup {
+  fn: import { deleteGroup } from "@src/groups/actions",
+  entities: [Group]
 }
-//#endregion
 
-//#region Payment
+action addGroupMember {
+  fn: import { addGroupMember } from "@src/groups/actions",
+  entities: [Group, GroupMember, User]
+}
+
+action updateGroupMember {
+  fn: import { updateGroupMember } from "@src/groups/actions",
+  entities: [GroupMember]
+}
+
+action removeGroupMember {
+  fn: import { removeGroupMember } from "@src/groups/actions",
+  entities: [GroupMember]
+}
+
+route CoursesRoute { path: "/courses", to: CoursesPage }
+page CoursesPage {
+  authRequired: true,
+  component: import CoursesPage from "@src/courses/CoursesPage"
+}
+
+route CourseRoute { path: "/courses/:courseId", to: CoursePage }
+page CoursePage {
+  authRequired: true,
+  component: import CoursePage from "@src/courses/CoursePage"
+}
+
+route TeeTimesRoute { path: "/tee-times", to: TeeTimesPage }
+page TeeTimesPage {
+  authRequired: true,
+  component: import TeeTimesPage from "@src/tee-times/TeeTimesPage"
+}
+
+route TeeTimeRoute { path: "/tee-times/:teeTimeId", to: TeeTimePage }
+page TeeTimePage {
+  authRequired: true,
+  component: import TeeTimePage from "@src/tee-times/TeeTimePage"
+}
+
 route PricingPageRoute { path: "/pricing", to: PricingPage }
 page PricingPage {
   component: import PricingPage from "@src/payment/PricingPage"
 }
 
-route CheckoutRoute { path: "/checkout", to: CheckoutPage }
-page CheckoutPage {
-  authRequired: true,
-  component: import Checkout from "@src/payment/CheckoutPage"
-}
-
 query getCustomerPortalUrl {
-  fn: import { getCustomerPortalUrl } from  "@src/payment/operations",
+  fn: import { getCustomerPortalUrl } from "@src/payment/operations",
   entities: [User]
 }
 
@@ -212,136 +218,30 @@ action generateCheckoutSession {
 }
 
 api paymentsWebhook {
-  fn: import { paymentsWebhook } from "@src/payment/webhook",
+  fn: import { stripeWebhook } from "@src/payment/stripe/webhook",
   entities: [User],
-  middlewareConfigFn: import { paymentsMiddlewareConfigFn } from "@src/payment/webhook",
+  middlewareConfigFn: import { stripeMiddlewareConfigFn } from "@src/payment/stripe/webhook",
   httpRoute: (POST, "/payments-webhook")
 }
-//#endregion
 
-//#region File Upload
-route FileUploadRoute { path: "/file-upload", to: FileUploadPage }
-page FileUploadPage {
+// Add new queries for dashboard
+query getUpcomingTeeTimes {
+  fn: import { getUpcomingTeeTimes } from "@src/tee-times/queries",
+  entities: [TeeTime, Course, Group]
+}
+
+query getRecentActivity {
+  fn: import { getRecentActivity } from "@src/analytics/queries",
+  entities: [Activity]
+}
+
+route AdminRoute { path: "/admin", to: AdminDashboardPage }
+page AdminDashboardPage {
   authRequired: true,
-  component: import FileUpload from "@src/file-upload/FileUploadPage"
-}
-
-action createFile {
-  fn: import { createFile } from "@src/file-upload/operations",
-  entities: [User, File]
-}
-
-query getAllFilesByUser {
-  fn: import { getAllFilesByUser } from "@src/file-upload/operations",
-  entities: [User, File]
-}
-
-query getDownloadFileSignedURL {
-  fn: import { getDownloadFileSignedURL } from "@src/file-upload/operations",
-  entities: [User, File]
-}
-//#endregion
-
-//#region Analytics
-query getDailyStats {
-  fn: import { getDailyStats } from "@src/analytics/operations",
-  entities: [User, DailyStats]
-}
-
-job dailyStatsJob {
-  executor: PgBoss,
-  perform: {
-    fn: import { calculateDailyStats } from "@src/analytics/stats"
-  },
-  schedule: {
-    cron: "0 * * * *" // every hour. useful in production
-    // cron: "* * * * *" // every minute. useful for debugging
-  },
-  entities: [User, DailyStats, Logs, PageViewSource]
-}
-//#endregion
-
-//#region Admin Dashboard
-route AdminRoute { path: "/admin", to: AnalyticsDashboardPage }
-page AnalyticsDashboardPage {
-  authRequired: true,
-  component: import AnalyticsDashboardPage from "@src/admin/dashboards/analytics/AnalyticsDashboardPage"
-}
-
-route AdminUsersRoute { path: "/admin/users", to: AdminUsersPage }
-page AdminUsersPage {
-  authRequired: true,
-  component: import AdminUsers from "@src/admin/dashboards/users/UsersDashboardPage"
-}
-
-route AdminSettingsRoute { path: "/admin/settings", to: AdminSettingsPage }
-page AdminSettingsPage {
-  authRequired: true,
-  component: import AdminSettings from "@src/admin/elements/settings/SettingsPage"
-}
-
-route AdminChartsRoute { path: "/admin/chart", to: AdminChartsPage }
-page AdminChartsPage {
-  authRequired: true,
-  component: import AdminCharts from "@src/admin/elements/charts/ChartsPage"
-}
-
-route AdminFormElementsRoute { path: "/admin/forms/form-elements", to: AdminFormElementsPage }
-page AdminFormElementsPage {
-  authRequired: true,
-  component: import AdminForms from "@src/admin/elements/forms/FormElementsPage"
-}
-
-route AdminFormLayoutsRoute { path: "/admin/forms/form-layouts", to: AdminFormLayoutsPage }
-page AdminFormLayoutsPage {
-  authRequired: true,
-  component: import AdminForms from "@src/admin/elements/forms/FormLayoutsPage"
-}
-
-route AdminCalendarRoute { path: "/admin/calendar", to: AdminCalendarPage }
-page AdminCalendarPage {
-  authRequired: true,
-  component: import AdminCalendar from "@src/admin/elements/calendar/CalendarPage"
-}
-
-route AdminUIAlertsRoute { path: "/admin/ui/alerts", to: AdminUIAlertsPage }
-page AdminUIAlertsPage {
-  authRequired: true,
-  component: import AdminUI from "@src/admin/elements/ui-elements/AlertsPage"
-}
-
-route AdminUIButtonsRoute { path: "/admin/ui/buttons", to: AdminUIButtonsPage }
-page AdminUIButtonsPage {
-  authRequired: true,
-  component: import AdminUI from "@src/admin/elements/ui-elements/ButtonsPage"
+  component: import AdminDashboardPage from "@src/admin/AdminDashboardPage"
 }
 
 route NotFoundRoute { path: "*", to: NotFoundPage }
 page NotFoundPage {
   component: import { NotFoundPage } from "@src/client/components/NotFoundPage"
 }
-//#endregion
-
-//#region Contact Form Messages
-// TODO: 
-// add functionality to allow users to send messages to admin
-// and make them accessible via the admin dashboard
-route AdminMessagesRoute { path: "/admin/messages", to: AdminMessagesPage }
-page AdminMessagesPage {
-  authRequired: true,
-  component: import AdminMessages from "@src/messages/MessagesPage"
-}
-//#endregion
-
-//#region Newsletter
-job sendNewsletter {
-  executor: PgBoss,
-  perform: {
-    fn: import { checkAndQueueNewsletterEmails } from "@src/newsletter/sendNewsletter"
-  },
-  schedule: {
-    cron: "0 7 * * 1" // at 7:00 am every Monday
-  },
-  entities: [User]
-}
-//#endregion
